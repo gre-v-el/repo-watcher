@@ -3,16 +3,19 @@
 usage: `repowatch [--help] <command> [<args>]`
 
 ### Commands:
-* `add <.git directory>` 
+* `add <.git directory path>` 
     
     Add a repository to the watchlist
-* `rm <.git directory>`
+* `rm <.git directory path>`
 
     Remove a repository from the watchlist
+* `clean`
+
+    Remove all inaccessible repositories (deleted or without permissions)
 * `find <directory>`
 
     Find all repositories in a given directory
-* `scan`
+* `report`
 
     Report the state of all watched repositories
 * `apply`
@@ -33,3 +36,6 @@ usage: `repowatch [--help] <command> [<args>]`
 * `AUTOSCAN_PULL`
 
     Whether or not the autoscan should pull trivial cases 
+* `NOTIFY_OFFLINE`
+
+    Whether or not the autoscan should send you a notification when you're offline
