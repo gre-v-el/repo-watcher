@@ -3,28 +3,31 @@
 usage: `repowatch [--help] <command> [<args>]`
 
 ### Commands:
-* `add <.git directory path>` 
+- [x] `add <.git directory path>` 
     
     Add a repository to the watchlist
-* `rm <.git directory path>`
+- [x] `rm <.git directory path>`
 
     Remove a repository from the watchlist
-* `list`
+- [x] `list`
 
     Display all watched repositories
-* `clean`
+- [ ] `status <.git directory path>`
+
+    Show the status of a given repository (watched, not watched, not accessible)
+- [x] `clean`
 
     Remove all inaccessible repositories (deleted, without permissions, unmounted)
-* `find <directory>`
+- [x] `find <directory>`
 
     Find all repositories in a given directory
-* `report`
+- [ ] `report [<.git directory path>]`
 
-    Report the state of all watched repositories
-* `apply`
+    If given a path, report the state if this repository. Otherwise report the state of all watched repositories
+- [ ] `apply`
 
     Resolve all trivial cases (only push or only pull)
-* `autoscan <never|hourly|daily|weekly|monthly>`
+- [ ] `autoscan <never|hourly|daily|weekly|monthly>`
 
     Set background checks frequency
 
