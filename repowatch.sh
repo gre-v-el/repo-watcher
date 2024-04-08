@@ -15,6 +15,10 @@ if [ "$1" = "add" ] && [ $# -eq 2 ]; then
     fi
 elif [ "$1" = "rm" ] && [ $# -eq 2 ]; then
     remove "$2"
+elif [ "$1" = "list" ] && [ $# -eq 1 ]; then
+    cat "$WATCHFILE"
+elif [ "$1" = "clean" ] && [ $# -eq 1 ]; then
+    clean_repos
 elif [ "$1" = "find" ] && [ $# -eq 2 ]; then
     if [ -d "$2" ]; then
         find_repos "$2"

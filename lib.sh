@@ -4,7 +4,7 @@ source config.config
 
 function add {
     # append normalized path to the watch
-    realpath "$*" >> "$WATCHFILE"
+    realpath -m "$*" >> "$WATCHFILE"
 
     # delete duplicates
     sort < "$WATCHFILE" | uniq > "${WATCHFILE}.tmp" && mv "${WATCHFILE}.tmp" "$WATCHFILE"
@@ -12,7 +12,7 @@ function add {
 
 function remove {
     local path
-    path="$(realpath "$*")"
+    path="$(realpath -m "$*")"
 
     # add a backslash before each slash
     path=$(echo "$path" | sed -e "s/\//\\\\\//g")
@@ -29,4 +29,14 @@ function find_repos {
     stdbuf -o0 tee "$tempfile"
 
     rm "$tempfile"
+}
+
+function clean_repos {
+    # remove all non-existing directories
+    cp "$WATCHFILE" "${WATCHFILE}.tmp"
+    while read -r line; do
+        if [ ! -d "$line" ]; then
+            remove "$line"
+        fi
+    done < "${WATCHFILE}.tmp"
 }

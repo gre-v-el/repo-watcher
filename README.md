@@ -9,9 +9,12 @@ usage: `repowatch [--help] <command> [<args>]`
 * `rm <.git directory path>`
 
     Remove a repository from the watchlist
+* `list`
+
+    Display all watched repositories
 * `clean`
 
-    Remove all inaccessible repositories (deleted or without permissions)
+    Remove all inaccessible repositories (deleted, without permissions, unmounted)
 * `find <directory>`
 
     Find all repositories in a given directory
