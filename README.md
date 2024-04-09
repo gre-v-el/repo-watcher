@@ -12,30 +12,35 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `list`
 
     Display all watched repositories
-- [ ] `status <.git directory path>`
+- [x] `status <.git directory path>`
 
-    Show the status of a given repository (watched, not watched, not accessible)
+    Show the status of a given repository (watched, available)
 - [x] `clean`
 
-    Remove all inaccessible repositories (deleted, without permissions, unmounted)
-- [x] `find <directory>`
+    Remove all unavailable repositories (deleted, without permissions, unmounted)
+- [x] `wipe`
 
-    Find all repositories in a given directory
-- [ ] `report [<.git directory path>]`
+    Remove all repositories from the list
+- [x] `find <directory> [-w]`
 
-    If given a path, report the state if this repository. Otherwise report the state of all watched repositories
+    Find all repositories in a given directory. By default it omits already watched repositories. -w flags includes watched repositories.
+- [ ] `report [<.git directory path>] [-s]`
+
+    If given a path, report the state of this repository. Otherwise report the state of all watched repositories. `-s` flag tells the program to only report the number of successes/failures without displaying data for each repository.
 - [ ] `apply`
 
     Resolve all trivial cases (only push or only pull)
-- [ ] `autoscan <never|hourly|daily|weekly|monthly>`
+- [ ] `autoreport <never|hourly|daily|weekly|monthly>`
 
     Set background checks frequency
+- [ ] `gui`
 
+    Launch a zenity based graphical user interface.
 
 ### See `config.config` for additional configuration:
 * `WATCHFILE`
 
-    A file to star watched repositories
+    A file to store watched repositories
 * `AUTOSCAN_PUSH`
 
     Whether or not the autoscan should push trivial cases 
