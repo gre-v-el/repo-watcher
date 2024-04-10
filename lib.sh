@@ -144,12 +144,15 @@ function report_single_repo {
         return 1
     fi
 
+    # Fetch latest changes from remote
+    git fetch origin &>/dev/null
+
     # Gather information about the repository
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
     local remote=$(git config --get remote.origin.url)
     local has_uncommitted_changes=$(git status --porcelain)
-    local ahead=$(git rev-list --count --left-only HEAD...@{u} 2>/dev/null || echo 0)
-    local behind=$(git rev-list --count --right-only HEAD...@{u} 2>/dev/null || echo 0)
+    local behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
+    local ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
 
     # Display information about the repository
     if [ "$is_silent" != "-s" ]; then
@@ -171,6 +174,8 @@ function report_single_repo {
     # Return to the original directory
     cd - >/dev/null || return 1
 }
+
+
 
 function report_watched {
     while read -r line; do
