@@ -129,15 +129,52 @@ function report_single_repo {
     local path="$1"
     local is_silent="$2"
     
-    cd "$path/.." || exit
+    # Check if the directory exists
+    if [ ! -d "$path" ]; then
+        echo "Error: Repository not found at '$path'."
+        return 1
+    fi
 
-    git fetch --dry-run -v
+    # Navigate to the repository directory
+    cd "$path/.." || return 1
 
-    cd - >/dev/null || exit
+    # Check if it's a git repository
+    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+        echo "Error: '$path' is not a Git repository."
+        return 1
+    fi
+
+    # Gather information about the repository
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local remote=$(git config --get remote.origin.url)
+    local has_uncommitted_changes=$(git status --porcelain)
+    local ahead=$(git rev-list --count --left-only @{u}...HEAD)
+    local behind=$(git rev-list --count --right-only @{u}...HEAD)
+
+    # Display information about the repository
+    if [ "$is_silent" != "-s" ]; then
+        echo "Repository: $(pwd)"
+        echo "Branch: $branch"
+        echo "Remote: $remote"
+        if [ -n "$has_uncommitted_changes" ]; then
+            echo "Has uncommitted changes: Yes"
+        else
+            echo "Has uncommitted changes: No"
+        fi
+        echo "Ahead of remote: $ahead commits"
+        echo "Behind remote: $behind commits"
+    else
+        # If silent mode is enabled, only display a summary
+        echo "$(pwd): Branch - $branch, Ahead - $ahead, Behind - $behind"
+    fi
+
+    # Return to the original directory
+    cd - >/dev/null || return 1
 }
 
 function report_watched {
     while read -r line; do
         report_single_repo "$line" "$1"
+        echo ""
     done < "$WATCHFILE"
 }
