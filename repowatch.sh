@@ -63,6 +63,7 @@ elif [ "$1" = "report" ] && [ $# -eq 2 ]; then
 elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "true"
+    summarize_counter_single
 # INVALID USAGE
 else
     echo "Invalid usage. See $0 --help"

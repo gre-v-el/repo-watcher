@@ -24,7 +24,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `find <directory> [-w]`
 
     Find all repositories in a given directory. By default it omits already watched repositories. -w flags includes watched repositories.
-- [x] `report [<.git directory path>] [-s]`
+- [ ] `report [<.git directory path>] [-s]`
 
     If given a path, report the state of this repository. Otherwise report the state of all watched repositories. `-s` flag tells the program to only report the number of successes/failures without displaying data for each repository.
 - [ ] `apply`
@@ -50,3 +50,10 @@ usage: `repowatch [--help] <command> [<args>]`
 * `NOTIFY_OFFLINE`
 
     Whether or not the autoscan should send you a notification when you're offline
+
+
+
+# TODO
+report:
+* print progress (different for silent and not silent)
+* print summary

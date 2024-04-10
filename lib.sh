@@ -124,14 +124,25 @@ function check_internet {
     fi
 }
 
-# $1 - global path, $2 - is silent? "true"/"false" 
+TOTAL=0
+NOT_FOUND=0
+NOT_GIT=0
+NO_REMOTE=0
+UNCOMMITED=0
+AHEAD=0
+BEHIND=0
+
 function report_single_repo {
     local path="$1"
-    local is_silent="$2"
+    local is_silent="$2" #"true"/"false"
     
+    TOTAL=$((TOTAL+1))
     # Check if the directory exists
     if [ ! -d "$path" ]; then
-        echo "Error: Repository not found at '$path'."
+        if [ "$is_silent" = "false" ]; then
+            echo "Error: Directory not found at '$path'."
+        fi
+        NOT_FOUND=$((NOT_FOUND+1))
         return 1
     fi
 
@@ -140,7 +151,10 @@ function report_single_repo {
 
     # Check if it's a git repository
     if ! git rev-parse --is-inside-work-tree &>/dev/null; then
-        echo "Error: '$path' is not a Git repository."
+        if [ "$is_silent" = "false" ]; then
+            echo "Error: '$path' is not a Git repository."
+        fi
+        NOT_GIT=$((NOT_GIT+1))
         return 1
     fi
 
@@ -154,32 +168,82 @@ function report_single_repo {
     local behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
     local ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
 
+    # Update counters
+    if [ -z "$remote" ]; then
+        NO_REMOTE=$((NO_REMOTE+1))
+    fi
+    if [ -n "$has_uncommitted_changes" ]; then
+        UNCOMMITED=$((UNCOMMITED+1))
+    fi
+    if [ "$ahead" -gt 0 ]; then
+        AHEAD=$((AHEAD+1))
+    fi
+    if [ "$behind" -gt 0 ]; then
+        BEHIND=$((BEHIND+1))
+    fi
+
     # Display information about the repository
-    if [ "$is_silent" != "-s" ]; then
-        echo "Repository: $(pwd)"
-        echo "Branch: $branch"
-        echo "Remote: ${remote:-No remote configured}"
+    if [ "$is_silent" != "true" ]; then
+        printf "%-20s %s\n" "Repository:" "$(pwd)"
+        printf "%-20s %s\n" "Branch:" "$branch"
+        printf "%-20s %s\n" "Remote:" "${remote:-No remote configured}"
         if [ -n "$has_uncommitted_changes" ]; then
-            echo "Has uncommitted changes: Yes"
+            printf "%-20s %s\n" "Uncommited changes:" "Yes"
         else
-            echo "Has uncommitted changes: No"
+            printf "%-20s %s\n" "Uncommited changes:" "No"
         fi
-        echo "Ahead of remote: $ahead commits"
-        echo "Behind remote: $behind commits"
-    else
-        # If silent mode is enabled, only display a summary
-        echo "$(pwd): Branch - $branch, Ahead - $ahead, Behind - $behind"
+        printf "%-20s %s\n" "Ahead of remote:" "$ahead commits"
+        printf "%-20s %s\n" "Behind remote:" "$behind commits"
     fi
 
     # Return to the original directory
     cd - >/dev/null || return 1
 }
 
+function summarize_counter_single {
+    if [ $TOTAL -eq 0 ]; then
+        echo "No repositories found."
+        return
+    fi
 
+    if [ $NOT_FOUND -gt 0 ]; then
+        echo "Repository not found."
+        return
+    fi
+
+    if [ $NOT_GIT -gt 0 ]; then
+        echo "Not a git repository. (Did you navigate to the /.git folder?)"
+        return
+    fi
+
+    if [ $NO_REMOTE -gt 0 ]; then
+        echo "No remote configured."
+        return
+    fi
+
+    if [ $UNCOMMITED -gt 0 ]; then
+        echo "The ropository has uncommited changes. "
+    fi
+
+    if [ $AHEAD -gt 0 ] && [ $BEHIND -gt 0 ]; then
+        echo "The repository is both ahead of and behind the remote. "
+        return
+    fi
+    
+    if [ $AHEAD -gt 0 ]; then
+        echo "The repository is ahead of the remote. "
+    fi
+
+    if [ $BEHIND -gt 0 ]; then
+        echo "The repository is behind the remote. "
+    fi
+}
 
 function report_watched {
     while read -r line; do
         report_single_repo "$line" "$1"
-        echo ""
+        if [ "$1" != "true" ]; then
+            echo ""
+        fi
     done < "$WATCHFILE"
 }
