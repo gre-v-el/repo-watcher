@@ -131,6 +131,7 @@ NO_REMOTE=0
 UNCOMMITED=0
 AHEAD=0
 BEHIND=0
+UP_TO_DATE=0
 
 function report_single_repo {
     local path="$1"
@@ -180,6 +181,9 @@ function report_single_repo {
     fi
     if [ "$behind" -gt 0 ]; then
         BEHIND=$((BEHIND+1))
+    fi
+    if [ -n "$remote" ] && [ "$ahead" -eq 0 ] && [ "$behind" -eq 0 ] && [ -z "$has_uncommitted_changes" ]; then
+        UP_TO_DATE=$((UP_TO_DATE+1))
     fi
 
     # Display information about the repository
@@ -232,10 +236,17 @@ function summarize_counters_single {
     
     if [ $AHEAD -gt 0 ]; then
         echo "The repository is ahead of the remote. "
+        return
     fi
 
     if [ $BEHIND -gt 0 ]; then
         echo "The repository is behind the remote. "
+        return
+    fi
+
+    if [ $UP_TO_DATE -gt 0 ]; then
+        echo "The repository is up to date. "
+        return
     fi
 }
 
@@ -255,6 +266,7 @@ function summarize_counters_multiple {
     if [ $NO_REMOTE -gt 0 ]; then
         echo "Repositories without remote configured: $NO_REMOTE"
     fi
+    echo "Repositories up to date: $UP_TO_DATE"
     echo "Repositories with uncommited changes: $UNCOMMITED"
     echo "Repositories ahead of remote: $AHEAD"
     echo "Repositories behind remote: $BEHIND"
