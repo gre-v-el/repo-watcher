@@ -145,16 +145,16 @@ function report_single_repo {
     fi
 
     # Gather information about the repository
-    local branch=$(git symbolic-ref --short HEAD)
+    local branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
     local remote=$(git config --get remote.origin.url)
     local has_uncommitted_changes=$(git status --porcelain)
-    local ahead=$(git rev-list --count --left-only @{u}...HEAD 2>/dev/null || echo 0)
-    local behind=$(git rev-list --count --right-only @{u}...HEAD 2>/dev/null || echo 0)
+    local ahead=$(git rev-list --count --left-only HEAD...@{u} 2>/dev/null || echo 0)
+    local behind=$(git rev-list --count --right-only HEAD...@{u} 2>/dev/null || echo 0)
 
     # Display information about the repository
     if [ "$is_silent" != "-s" ]; then
         echo "Repository: $(pwd)"
-        echo "Branch: ${branch:-HEAD (detached)}"
+        echo "Branch: $branch"
         echo "Remote: ${remote:-No remote configured}"
         if [ -n "$has_uncommitted_changes" ]; then
             echo "Has uncommitted changes: Yes"
@@ -165,7 +165,7 @@ function report_single_repo {
         echo "Behind remote: $behind commits"
     else
         # If silent mode is enabled, only display a summary
-        echo "$(pwd): Branch - ${branch:-HEAD (detached)}, Ahead - $ahead, Behind - $behind"
+        echo "$(pwd): Branch - $branch, Ahead - $ahead, Behind - $behind"
     fi
 
     # Return to the original directory
