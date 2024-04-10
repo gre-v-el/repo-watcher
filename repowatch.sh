@@ -51,10 +51,12 @@ elif [ "$1" = "find" ] && [ $# -eq 3 ] && [ "$3" = "-w" ]; then
 elif [ "$1" = "report" ] && [ $# -eq 1 ]; then
     check_internet
     report_watched "false"
+    summarize_counters_multiple
 # REPORT WATCHED (SILENT)
 elif [ "$1" = "report" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
     check_internet
     report_watched "true"
+    summarize_counters_multiple
 # REPORT GIVEN
 elif [ "$1" = "report" ] && [ $# -eq 2 ]; then
     check_internet
@@ -63,7 +65,7 @@ elif [ "$1" = "report" ] && [ $# -eq 2 ]; then
 elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "true"
-    summarize_counter_single
+    summarize_counters_single
 # INVALID USAGE
 else
     echo "Invalid usage. See $0 --help"

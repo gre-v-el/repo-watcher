@@ -56,4 +56,3 @@ usage: `repowatch [--help] <command> [<args>]`
 # TODO
 report:
 * print progress (different for silent and not silent)
-* print summary

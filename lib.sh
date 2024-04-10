@@ -200,7 +200,7 @@ function report_single_repo {
     cd - >/dev/null || return 1
 }
 
-function summarize_counter_single {
+function summarize_counters_single {
     if [ $TOTAL -eq 0 ]; then
         echo "No repositories found."
         return
@@ -237,6 +237,28 @@ function summarize_counter_single {
     if [ $BEHIND -gt 0 ]; then
         echo "The repository is behind the remote. "
     fi
+}
+
+function summarize_counters_multiple {
+    if [ $TOTAL -eq 0 ]; then
+        echo "No repositories in the watchlist."
+        return
+    fi
+
+    echo "Total repositories: $TOTAL"
+    if [ $NOT_FOUND -gt 0 ]; then
+        echo "Not found: $NOT_FOUND"
+    fi
+    if [ $NOT_GIT -gt 0 ]; then
+        echo "Directories that are not git repositories: $NOT_GIT"
+    fi
+    if [ $NO_REMOTE -gt 0 ]; then
+        echo "Repositories without remote configured: $NO_REMOTE"
+    fi
+    echo "Repositories with uncommited changes: $UNCOMMITED"
+    echo "Repositories ahead of remote: $AHEAD"
+    echo "Repositories behind remote: $BEHIND"
+
 }
 
 function report_watched {
