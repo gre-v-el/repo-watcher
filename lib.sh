@@ -163,11 +163,17 @@ function report_single_repo {
     git fetch origin &>/dev/null
 
     # Gather information about the repository
-    local branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
-    local remote=$(git config --get remote.origin.url)
-    local has_uncommitted_changes=$(git status --porcelain)
-    local behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
-    local ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
+    local branch
+    local remote
+    local has_uncommitted_changes
+    local behind
+    local ahead
+    
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
+    remote=$(git config --get remote.origin.url)
+    has_uncommitted_changes=$(git status --porcelain)
+    behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
+    ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
 
     # Update counters
     if [ -z "$remote" ]; then
@@ -270,14 +276,30 @@ function summarize_counters_multiple {
     echo "Repositories with uncommited changes: $UNCOMMITED"
     echo "Repositories ahead of remote: $AHEAD"
     echo "Repositories behind remote: $BEHIND"
-
 }
 
 function report_watched {
+    local iter=0
+    local total
+    total=$(wc -l < "$WATCHFILE")
+    
+    if [ "$total" -eq 0 ]; then
+        echo "No repositories in the watchlist."
+        return
+    fi
+
     while read -r line; do
+        if [ "$1" != "true" ]; then
+            echo "[$((iter+1))/$total]"
+        else
+            echo -ne "[$((iter+1))/$total]\r"
+        fi
+
         report_single_repo "$line" "$1"
         if [ "$1" != "true" ]; then
             echo ""
         fi
+
+        iter=$((iter+1))
     done < "$WATCHFILE"
 }
