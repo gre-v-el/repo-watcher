@@ -202,8 +202,11 @@ function report_single_repo {
         else
             printf "%-20s %s\n" "Uncommited changes:" "No"
         fi
-        printf "%-20s %s\n" "Ahead of remote:" "$ahead commits"
-        printf "%-20s %s\n" "Behind remote:" "$behind commits"
+
+        if [ -n "$remote" ]; then
+            printf "%-20s %s\n" "Ahead of remote:" "$ahead commits"
+            printf "%-20s %s\n" "Behind remote:" "$behind commits"
+        fi
     fi
 
     # Return to the original directory

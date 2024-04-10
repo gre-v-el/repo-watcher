@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Author           : Gabriel Myszkier
+# Created On       : Apr 8 2024
+# Last Modified By : Gabriel Myszkier
+# Last Modified On : Apr 10 2024
+# Version          : 0.1
+#
+# Description      :
+# Watch your git repositories for changes
+#
+# Licensed under GPL
+
+
 source lib.sh
 
 if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
@@ -66,6 +78,8 @@ elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "true"
     summarize_counters_single
+elif [ "$1" = "apply" ] && [ $# -eq 1 ]; then
+    apply
 # INVALID USAGE
 else
     echo "Invalid usage. See $0 --help"
