@@ -24,7 +24,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `find <directory> [-w]`
 
     Find all repositories in a given directory. By default it omits already watched repositories. -w flags includes watched repositories.
-- [ ] `report [<.git directory path>] [-s]`
+- [x] `report [<.git directory path>] [-s]`
 
     If given a path, report the state of this repository. Otherwise report the state of all watched repositories. `-s` flag tells the program to only report the number of successes/failures without displaying data for each repository.
 - [ ] `apply`
