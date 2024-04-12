@@ -53,6 +53,9 @@ usage: `repowatch [--help] <command> [<args>]`
 * `NOTIFY_OFFLINE`
 
     Whether or not the autoscan should send a notification when you're offline.
+* `PING_DOMAIN`
+
+    A domain the program will ping to check if you're online.
 
 ### Comments
 

@@ -129,7 +129,7 @@ function repo_status {
 }
 
 function check_internet {
-    if ! wget -q --spider http://google.com; then
+    if ! wget -q --spider "$PING_DOMAIN"; then
         echo "No internet connection"
         exit
     fi
@@ -329,6 +329,7 @@ function apply {
             if [ "$silent" != "true" ]; then
                 echo "$line is inaccessible"
             fi
+            cd - > /dev/null || return
             continue
         fi
 
@@ -336,44 +337,44 @@ function apply {
 
         git fetch origin &>/dev/null
 
+        local branch
         local has_uncommitted_changes
         local behind
         local ahead
         
         branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
         if [ "$branch" = "HEAD (detached)" ]; then
+            if [ "$silent" != "true" ]; then
+                echo "Skipping $line (detached HEAD)"
+            fi
+            cd - > /dev/null || return
             continue
         fi
         has_uncommitted_changes=$(git status --porcelain)
         behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
         ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
 
-        echo "$line"
-        echo "behind: $behind"
-        echo "ahead: $ahead"
-        echo "uncommitted: $has_uncommitted_changes"
-
         if [ -n "$has_uncommitted_changes" ]; then
+            if [ "$silent" != "true" ]; then
+                echo "Skipping $line (uncommited changes)"
+            fi
+            cd - > /dev/null || return
             continue
         fi
 
         if [ "$ahead" -eq 0 ] && [ "$behind" -gt 0 ]; then
             if [ "$silent" != "true" ]; then
-                echo "Pulling changes in $line"
-                git pull origin "$branch"
-            else
-                git pull origin "$branch" &>/dev/null
+                echo "Pulling $behind commits to $line"
             fi
+            git pull origin "$branch" &>/dev/null
             pulled=$((pulled+1))
         fi
 
         if [ "$behind" -eq 0 ] && [ "$ahead" -gt 0 ]; then
             if [ "$silent" != "true" ]; then
-                echo "Pushing changes in $line"
-                git push origin "$branch"
-            else
-                git push origin "$branch" &>/dev/null
+                echo "Pushing $ahead commits in $line"
             fi
+            git push origin "$branch" &>/dev/null
             pushed=$((pushed+1))
         fi
 
