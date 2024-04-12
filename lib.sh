@@ -340,9 +340,18 @@ function apply {
         local behind
         local ahead
         
+        branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
+        if [ "$branch" = "HEAD (detached)" ]; then
+            continue
+        fi
         has_uncommitted_changes=$(git status --porcelain)
         behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
         ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
+
+        echo "$line"
+        echo "behind: $behind"
+        echo "ahead: $ahead"
+        echo "uncommitted: $has_uncommitted_changes"
 
         if [ -n "$has_uncommitted_changes" ]; then
             continue
