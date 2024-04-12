@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Author           : Gabriel Myszkier
+# Created On       : Apr 8 2024
+# Last Modified By : Gabriel Myszkier
+# Last Modified On : Apr 10 2024
+# Version          : 0.1
+#
+# Description      :
+# Watch your git repositories for changes (library functions)
+#
+# Licensed under GPL
+
 source config.config
 
 function add {
@@ -53,7 +64,7 @@ function find_repos {
     echo "Found $lines repositories in $1"
     echo ""
 
-    echo "Enter the number of the repository to add (or press ENTER to end):"
+    echo "Enter the index of the repository to add (or press ENTER to end):"
     while true; do 
         echo -n "    > "
         
@@ -305,4 +316,60 @@ function report_watched {
 
         iter=$((iter+1))
     done < "$WATCHFILE"
+}
+
+function apply {
+    local silent="$1" # "true"/"false"
+
+    local pushed=0
+    local pulled=0
+
+    while read -r line; do
+        if ! [ -d "$line" ]; then 
+            echo "$line is inaccessible"
+            continue
+        fi
+
+        cd "$line/.." || return
+
+        git fetch origin &>/dev/null
+
+        local has_uncommitted_changes
+        local behind
+        local ahead
+        
+        has_uncommitted_changes=$(git status --porcelain)
+        behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
+        ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
+
+        if [ -n "$has_uncommitted_changes" ]; then
+            continue
+        fi
+
+        if [ "$ahead" -eq 0 ] && [ "$behind" -gt 0 ]; then
+            if [ "$silent" != "true" ]; then
+                echo "Pulling changes in $line"
+                git pull origin "$branch"
+            else
+                git pull origin "$branch" &>/dev/null
+            fi
+            pulled=$((pulled+1))
+        fi
+
+        if [ "$behind" -eq 0 ] && [ "$ahead" -gt 0 ]; then
+            if [ "$silent" != "true" ]; then
+                echo "Pushing changes in $line"
+                git push origin "$branch"
+            else
+                git push origin "$branch" &>/dev/null
+            fi
+            pushed=$((pushed+1))
+        fi
+
+        cd - || return
+    done < "$WATCHFILE"
+
+    echo "Out of $(wc -l < "$WATCHFILE") repositories:"
+    echo "Pushed $pushed repositories"
+    echo "Pulled $pulled repositories"
 }

@@ -7,7 +7,7 @@
 # Version          : 0.1
 #
 # Description      :
-# Watch your git repositories for changes
+# Watch your git repositories for changes (entry point - CLI)
 #
 # Licensed under GPL
 
@@ -78,7 +78,9 @@ elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "true"
     summarize_counters_single
+# APPLY
 elif [ "$1" = "apply" ] && [ $# -eq 1 ]; then
+    check_internet
     apply
 # INVALID USAGE
 else

@@ -27,9 +27,9 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `report [<.git directory path>] [-s]`
 
     If given a path, it reports the state of this repository. Otherwise, it reports the state of all watched repositories. The -s flag tells the program to summarize the report without details.
-- [ ] `apply`
+- [ ] `apply [-s]`
 
-    Resolve all trivial cases (only push or only pull).
+    Resolve all trivial cases (only push or only pull). The -s flag tells the program to summarize the report without details.
 - [ ] `autoreport <never|hourly|daily|weekly|monthly>`
 
     Set the frequency of background checks. Each check will send a desktop notification if any repository requires attention.
@@ -88,7 +88,7 @@ $ repowatch find /home/usr
 
 Found 2 repositories in /home/usr/
 
-Enter the number of the repository to add (or press ENTER to end):
+Enter the index of the repository to add (or press ENTER to end):
     > 1
 Added /home/usr/otherrepo1/.git
     > [Enter]
