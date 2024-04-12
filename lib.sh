@@ -3,7 +3,7 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 10 2024
+# Last Modified On : Apr 12 2024
 # Version          : 0.1
 #
 # Description      :
@@ -321,10 +321,19 @@ function report_watched {
 function apply {
     local silent="$1" # "true"/"false"
 
+    local total
+    total="$(wc -l < "$WATCHFILE")"
+    local iter=0
+
     local pushed=0
     local pulled=0
 
     while read -r line; do
+        iter=$((iter+1))
+        if [ "$silent" = "true" ]; then
+            echo -ne "[$iter/$total]\r"
+        fi
+
         if ! [ -d "$line" ]; then
             if [ "$silent" != "true" ]; then
                 echo "$line is inaccessible"
@@ -381,7 +390,7 @@ function apply {
         cd - > /dev/null || return
     done < "$WATCHFILE"
 
-    echo "Out of $(wc -l < "$WATCHFILE") repositories:"
+    echo "Out of $total repositories:"
     echo "Pushed $pushed repositories"
     echo "Pulled $pulled repositories"
 }

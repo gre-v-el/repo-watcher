@@ -27,7 +27,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `report [<.git directory path>] [-s]`
 
     If given a path, it reports the state of this repository. Otherwise, it reports the state of all watched repositories. The -s flag tells the program to summarize the report without details.
-- [ ] `apply [-s]`
+- [x] `apply [-s]`
 
     Resolve all trivial cases (only push or only pull). The -s flag tells the program to summarize the report without details.
 - [ ] `autoreport <never|hourly|daily|weekly|monthly>`

@@ -3,7 +3,7 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 10 2024
+# Last Modified On : Apr 12 2024
 # Version          : 0.1
 #
 # Description      :
@@ -15,7 +15,7 @@
 source lib.sh
 
 if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    echo "Placeholder usage"
+    cat help.msg
     exit
 fi
 
