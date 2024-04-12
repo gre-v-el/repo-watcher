@@ -325,8 +325,10 @@ function apply {
     local pulled=0
 
     while read -r line; do
-        if ! [ -d "$line" ]; then 
-            echo "$line is inaccessible"
+        if ! [ -d "$line" ]; then
+            if [ "$silent" != "true" ]; then
+                echo "$line is inaccessible"
+            fi
             continue
         fi
 
@@ -366,7 +368,7 @@ function apply {
             pushed=$((pushed+1))
         fi
 
-        cd - || return
+        cd - > /dev/null || return
     done < "$WATCHFILE"
 
     echo "Out of $(wc -l < "$WATCHFILE") repositories:"
