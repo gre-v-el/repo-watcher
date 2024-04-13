@@ -82,9 +82,12 @@ elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
 elif [ "$1" = "apply" ] && [ $# -eq 1 ]; then
     check_internet
     apply "false"
+# APPLY (SILENT)
 elif [ "$1" = "apply" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
     check_internet
     apply "true"
+elif [ "$1" = "notify" ] && [ $# -eq 1 ]; then
+    notify
 # INVALID USAGE
 else
     echo "Invalid usage. See $0 --help"

@@ -394,3 +394,15 @@ function apply {
     echo "Pushed $pushed repositories"
     echo "Pulled $pulled repositories"
 }
+
+function notify {
+    if ! wget -q --spider "$PING_DOMAIN" ; then
+        if [ "$NOTIFY_OFFLINE" = "true" ]; then
+            zenity --notification --text="Repowatch\nNo internet connection"
+        fi
+        exit 0
+    fi
+
+    report_watched "false" &>/dev/null
+    zenity --notification --text="Repowatch\nUp to date: $UP_TO_DATE\nUncommited: $UNCOMMITED\nAhead: $AHEAD\nBehind: $BEHIND"
+}

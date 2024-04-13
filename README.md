@@ -33,7 +33,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [ ] `autoreport <never|hourly|daily|weekly|monthly>`
 
     Set the frequency of background checks. Each check will send a desktop notification if any repository requires attention.
-- [ ] `notify` 
+- [x] `notify` 
 
     Report watched repositories as a notification. This is what autoreport looks like.
 - [ ] `gui`
