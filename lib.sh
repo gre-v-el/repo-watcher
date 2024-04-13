@@ -404,5 +404,12 @@ function notify {
     fi
 
     report_watched "false" &>/dev/null
-    zenity --notification --text="Repowatch\nUp to date: $UP_TO_DATE\nUncommited: $UNCOMMITED\nAhead: $AHEAD\nBehind: $BEHIND"
+
+    local text="Up to date: $UP_TO_DATE\nAhead: $AHEAD\nBehind: $BEHIND"
+
+    if [ "$NOT_FOUND" -gt 0 ]; then
+        text="$text\nInaccessinble: $NOT_FOUND"
+    fi
+
+    zenity --notification --text="Repowatch\n$text"
 }
