@@ -34,10 +34,10 @@ elif [ "$1" = "list" ] && [ $# -eq 1 ]; then
     cat "$WATCHFILE"
 # STATUS
 elif [ "$1" = "status" ] && [ $# -eq 2 ]; then
-    if [[ "$2" =~ \/\.git$ ]]; then
+    if [[ "$2" =~ \/\.git[\/]?$ ]]; then
         repo_status "$2"
     else
-        echo "The repo does not exist or isn't a .git directory"
+        echo "This is not a .git directory"
     fi
 # CLEAN
 elif [ "$1" = "clean" ] && [ $# -eq 1 ]; then

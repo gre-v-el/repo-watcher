@@ -4,7 +4,7 @@ usage: `repowatch [--help] <command> [<args>]`
 
 ### Commands:
 - [x] `add <.git directory path>` 
-    
+  
     Add a repository to the watchlist
 - [x] `rm <.git directory path>`
 
