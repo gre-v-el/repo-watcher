@@ -25,10 +25,8 @@ Commands:
     resolve [-s]                  Resolve all trivial cases (only push or only pull). 
                                     The -s flag tells the program to summarize the 
                                     report without details.
-    autoreport <never|hourly|daily|weekly|monthly>    
-                                  Set the frequency of background checks. Each check 
-                                    will send a desktop notification if any repository 
-                                    requires attention.
+    autoreport 
+                                  TODO!
     notify                        Report watched repositories as a notification. 
                                     This is what autoreport looks like.
     gui                           Launch a Zenity-based graphical user interface.

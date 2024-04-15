@@ -413,3 +413,60 @@ function notify {
 
     zenity --notification --text="Repowatch\n$text"
 }
+
+function autoreport_get {
+    local freq
+    local delay
+
+sudo -s freq="$freq" delay="$delay" <<'SUDO_END'
+    source config.config
+
+    read -r freq delay \
+    < <(grep "$ANACRONTAB_JOB_ID" "$ANACRONTAB_CONFIG" \
+    | sed -e "s/[ \t]\+/ /g" \
+    | cut -d ' ' -f 1,2 )
+
+    if [[ -z "$freq" ]] || [[ -z "$delay" ]]; then
+        echo "Autoreport not set."
+    else
+        echo "Frequency: $freq days"
+        echo "Delay: $delay minutes after startup"
+    fi
+SUDO_END
+}
+
+function autoreport_disable {
+sudo -s <<'SUDO_END'
+    source config.config
+
+    temp=$(mktemp)
+
+    grep -v "$ANACRONTAB_JOB_ID" "$ANACRONTAB_CONFIG" > "$temp"
+    cp --preserve=mode "$temp" "$ANACRONTAB_CONFIG"
+    rm "$temp"
+
+SUDO_END
+}
+
+function autoreport_set {
+    local freq="$1"
+    local delay="$2"
+
+sudo -s freq="$freq" delay="$delay" <<'SUDO_END'
+    source lib.sh
+    source config.config
+
+    autoreport_disable
+
+    echo "$freq $delay $ANACRONTAB_JOB_ID repowatch autoreport" >> "$ANACRONTAB_CONFIG"
+
+SUDO_END
+}
+
+function autoreport_perform {
+    if [ "$AUTOSCAN_RESOLVE" = "true" ]; then
+        resolve "true"
+    fi
+
+    notify
+}

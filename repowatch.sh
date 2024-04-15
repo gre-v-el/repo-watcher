@@ -86,6 +86,22 @@ elif [ "$1" = "resolve" ] && [ $# -eq 1 ]; then
 elif [ "$1" = "resolve" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
     check_internet
     resolve "true"
+# AUTOREPORT
+elif [ "$1" = "autoreport" ] && [ $# -eq 1 ]; then
+    autoreport_perform
+elif [ "$1" = "autoreport" ] && [ $# -eq 2 ] && [ "$2" = "-l" ]; then
+    autoreport_get
+# AUTOREPORT (disable)
+elif [ "$1" = "autoreport" ] && [ $# -eq 2 ] && [ "$2" = "-d" ]; then
+    autoreport_disable
+# AUTOREPORT (SET)
+elif [ "$1" = "autoreport" ] && [ $# -eq 4 ] && [ "$2" = "-s" ]; then
+    if ! [[ "$3" =~ ^[1-9][0-9]*$ ]] || ! [[ "$4" =~ ^[1-9][0-9]*$ ]]; then
+        echo "Frequency and delay have to be whole numbers!"
+    else
+        autoreport_set "$3" "$4"
+    fi
+# NOTIFY
 elif [ "$1" = "notify" ] && [ $# -eq 1 ]; then
     notify
 # INVALID USAGE

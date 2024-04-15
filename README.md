@@ -30,9 +30,9 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `resolve [-s]`
 
     Resolve all trivial cases (only push or only pull). The -s flag tells the program to summarize the report without details.
-- [ ] `autoreport <never|hourly|daily|weekly|monthly>`
+- [x] `autoreport [-l] [-d] [-s <frequency> <delay>]`
 
-    Set the frequency of background checks. Each check will send a desktop notification if any repository requires attention.
+    Manage the frequency of background checks. `-l` flag outputs the current configuration. `-d` flag disables autoreport. `-s` flag sets a new configuration. `Frequency` is a period in days, `delay` is the delay in minutes after the system startup after which the check should be run. If no flags have been given, an actual check will be performed. Each check will send a desktop notification.
 - [x] `notify` 
 
     Report watched repositories as a notification. This is what autoreport looks like.
@@ -62,7 +62,7 @@ usage: `repowatch [--help] <command> [<args>]`
 
 The **.git directory path** is a path to the .git directory inside your repository, for example `/home/usr/repo/.git`. The paths can be both global and local.
 
-This tool requires **Zenity** to be installed.
+This tool requires **Zenity** and **anacron** to be installed.
 
 ### Examples
 
@@ -123,3 +123,12 @@ Repositories ahead of remote: 1
 Repositories behind remote: 1
 ```
 
+
+
+
+
+TODO:
+
+stderr
+wipe/clear ask for confirmation
+check zenity and anacron
