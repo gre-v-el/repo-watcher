@@ -27,7 +27,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `report [<.git directory path>] [-s]`
 
     If given a path, it reports the state of this repository. Otherwise, it reports the state of all watched repositories. The -s flag tells the program to summarize the report without details.
-- [x] `apply [-s]`
+- [x] `resolve [-s]`
 
     Resolve all trivial cases (only push or only pull). The -s flag tells the program to summarize the report without details.
 - [ ] `autoreport <never|hourly|daily|weekly|monthly>`
@@ -44,12 +44,9 @@ usage: `repowatch [--help] <command> [<args>]`
 * `WATCHFILE`
 
     A file to store watched repositories.
-* `AUTOSCAN_PUSH`
+* `AUTOSCAN_RESOLVE`
 
-    Whether or not the autoscan should push trivial cases. 
-* `AUTOSCAN_PULL`
-
-    Whether or not the autoscan should pull trivial cases.
+    Whether or not the autoscan should resolve trivial cases.
 * `NOTIFY_OFFLINE`
 
     Whether or not the autoscan should send a notification when you're offline.

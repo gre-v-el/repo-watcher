@@ -78,14 +78,14 @@ elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "true"
     summarize_counters_single
-# APPLY
-elif [ "$1" = "apply" ] && [ $# -eq 1 ]; then
+# RESOLVE
+elif [ "$1" = "resolve" ] && [ $# -eq 1 ]; then
     check_internet
-    apply "false"
-# APPLY (SILENT)
-elif [ "$1" = "apply" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
+    resolve "false"
+# RESOLVE (SILENT)
+elif [ "$1" = "resolve" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
     check_internet
-    apply "true"
+    resolve "true"
 elif [ "$1" = "notify" ] && [ $# -eq 1 ]; then
     notify
 # INVALID USAGE

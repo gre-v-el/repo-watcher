@@ -22,7 +22,7 @@ Commands:
                                     repository. Otherwise, it reports the state of 
                                     all watched repositories. The -s flag tells the 
                                     program to summarize the report without details.
-    apply [-s]                    Resolve all trivial cases (only push or only pull). 
+    resolve [-s]                  Resolve all trivial cases (only push or only pull). 
                                     The -s flag tells the program to summarize the 
                                     report without details.
     autoreport <never|hourly|daily|weekly|monthly>    
@@ -34,11 +34,10 @@ Commands:
     gui                           Launch a Zenity-based graphical user interface.
 
 See `config.config` for additional configuration:
-    WATCHFILE        A file to store watched repositories.
-    AUTOSCAN_PUSH    Whether or not the autoscan should push trivial cases. 
-    AUTOSCAN_PULL    Whether or not the autoscan should pull trivial cases.
-    NOTIFY_OFFLINE   Whether or not the autoscan should send a notification 
-                        when you're offline.
-    PING_DOMAIN      A domain the program will ping to check if you're online.
+    WATCHFILE         A file to store watched repositories.
+    AUTOSCAN_RESOLVE  Whether or not the autoscan should resolve trivial cases.
+    NOTIFY_OFFLINE    Whether or not the autoscan should send a notification 
+                         when you're offline.
+    PING_DOMAIN       A domain the program will ping to check if you're online.
 
 

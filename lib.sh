@@ -318,7 +318,7 @@ function report_watched {
     done < "$WATCHFILE"
 }
 
-function apply {
+function resolve {
     local silent="$1" # "true"/"false"
 
     local total
