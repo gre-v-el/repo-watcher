@@ -132,3 +132,4 @@ TODO:
 stderr
 wipe/clear ask for confirmation
 check zenity and anacron
+"Autoreport requires you to run the install.sh script. Otherwise they will be properly scheduled but not run."

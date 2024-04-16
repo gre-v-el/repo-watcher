@@ -452,13 +452,13 @@ function autoreport_set {
     local freq="$1"
     local delay="$2"
 
-sudo -s freq="$freq" delay="$delay" <<'SUDO_END'
+sudo -s freq="$freq" delay="$delay" usr="$USER" id="$(id -u)" <<'SUDO_END'
     source lib.sh
     source config.config
 
     autoreport_disable
 
-    echo "$freq $delay $ANACRONTAB_JOB_ID repowatch autoreport" >> "$ANACRONTAB_CONFIG"
+    echo "$freq $delay $ANACRONTAB_JOB_ID sudo -u $usr DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$id/bus /usr/local/bin/repowatch autoreport"  >> "$ANACRONTAB_CONFIG"
 
 SUDO_END
 }

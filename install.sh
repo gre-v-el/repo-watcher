@@ -30,7 +30,9 @@ fi
 cat <<CAT_END > "/usr/local/bin/repowatch"
 #!/bin/bash
 
-"$(realpath "$(dirname "$0")")/repowatch.sh" "\$@"
+cd "$(realpath "$(dirname "$0")")"
+
+"./repowatch.sh" "\$@"
 CAT_END
 
 # make the script executable
