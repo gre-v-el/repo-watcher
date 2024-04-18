@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Author           : Gabriel Myszkier
+# Created On       : Apr 15 2024
+# Last Modified By : Gabriel Myszkier
+# Last Modified On : Apr 18 2024
+# Version          : 0.1
+#
+# Description      :
+# Installation script for repowatch.
+#
+# Licensed under GPL
+
 # check dependencies
 if ! [ -x "$(command -v git)" ]; then
   echo 'Error: git is not installed.' >&2

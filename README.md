@@ -32,7 +32,7 @@ usage: `repowatch [--help] <command> [<args>]`
     Resolve all trivial cases (only push or only pull). The -s flag tells the program to summarize the report without details.
 - [x] `autoreport [-l] [-d] [-s <frequency> <delay>]`
 
-    Manage the frequency of background checks. `-l` flag outputs the current configuration. `-d` flag disables autoreport. `-s` flag sets a new configuration. `Frequency` is a period in days, `delay` is the delay in minutes after the system startup after which the check should be run. If no flags have been given, an actual check will be performed. Each check will send a desktop notification.
+    Manage the frequency of background checks. `-l` flag outputs the current configuration. `-d` flag disables autoreport. `-s` flag sets a new configuration. `Frequency` is a period in days, `delay` is the delay in minutes after the system startup after which the check should be run. If no flags have been given, an actual check will be performed. Each check will send a desktop notification. Requires sudo to read and write to anacron config.
 - [x] `notify` 
 
     Report watched repositories as a notification. This is what autoreport looks like.
@@ -132,4 +132,5 @@ TODO:
 stderr
 wipe/clear ask for confirmation
 check zenity and anacron
+instead of refusing to install warn. Refuse performing appropriate commadns
 "Autoreport requires you to run the install.sh script. Otherwise they will be properly scheduled but not run."

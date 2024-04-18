@@ -3,11 +3,11 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 12 2024
+# Last Modified On : Apr 18 2024
 # Version          : 0.1
 #
 # Description      :
-# Watch your git repositories for changes (library functions)
+# Library function for repowatch.
 #
 # Licensed under GPL
 
@@ -25,8 +25,9 @@ function remove {
     local path
     path="$(realpath -m "$*")"
 
-    # add a backslash before each slash
-    path=$(echo "$path" | sed -e "s/\//\\\\\//g")
+    # changes a slash (\/ = /) into a double backslash+slash (\\\\\/ = \\/)
+    path=$(echo "$path" | sed -e "s/\//\\\\\//g") 
+    # ...which is then escaped in the next sed into \/
     sed -i "/$path/d" "$WATCHFILE"
 }
 
@@ -101,13 +102,13 @@ function clean_repos {
         fi
     done < "${WATCHFILE}.tmp"
 
-    mv "${WATCHFILE}.tmp" "$WATCHFILE" 
+    rm "${WATCHFILE}.tmp"
 
     echo "Removed $counter repos from the watchlist."
 }
 
 function wipe_repos {
-    echo "Removed $(wc -l "$WATCHFILE") repos from the watchlist."
+    echo "Removed $(wc -l "$WATCHFILE" | cut -d ' ' -f 1) repos from the watchlist."
     echo -n "" > "$WATCHFILE"
 }
 
@@ -183,8 +184,8 @@ function report_single_repo {
     branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD (detached)")
     remote=$(git config --get remote.origin.url)
     has_uncommitted_changes=$(git status --porcelain)
-    behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
-    ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
+    behind=$(git rev-list --count "HEAD..origin/$branch" 2>/dev/null || echo 0)
+    ahead=$(git rev-list --count "origin/$branch..HEAD" 2>/dev/null || echo 0)
 
     # Update counters
     if [ -z "$remote" ]; then
@@ -298,7 +299,6 @@ function report_watched {
     total=$(wc -l < "$WATCHFILE")
     
     if [ "$total" -eq 0 ]; then
-        echo "No repositories in the watchlist."
         return
     fi
 
@@ -360,8 +360,8 @@ function resolve {
             continue
         fi
         has_uncommitted_changes=$(git status --porcelain)
-        behind=$(git rev-list --count HEAD..origin/$branch 2>/dev/null || echo 0)
-        ahead=$(git rev-list --count origin/$branch..HEAD 2>/dev/null || echo 0)
+        behind=$(git rev-list --count "HEAD..origin/$branch" 2>/dev/null || echo 0)
+        ahead=$(git rev-list --count "origin/$branch..HEAD" 2>/dev/null || echo 0)
 
         if [ -n "$has_uncommitted_changes" ]; then
             if [ "$silent" != "true" ]; then

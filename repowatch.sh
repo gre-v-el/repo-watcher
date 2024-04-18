@@ -3,14 +3,13 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 12 2024
+# Last Modified On : Apr 18 2024
 # Version          : 0.1
 #
 # Description      :
-# Watch your git repositories for changes (entry point - CLI)
+# CLI entry point for repowatch.
 #
 # Licensed under GPL
-
 
 source lib.sh
 
@@ -21,7 +20,7 @@ fi
 
 # ADD
 if [ "$1" = "add" ] && [ $# -eq 2 ]; then
-    if [ -d "$2" ] && [[ "$2" =~ \/\.git$ ]]; then
+    if [ -d "$2" ] && [[ "$2" =~ \/\.git[\/]?$ ]]; then
         add "$2"
     else
         echo "The repo does not exist or isn't a .git directory"
