@@ -165,7 +165,7 @@ function report_single_repo {
     # Check if it's a git repository
     if ! git rev-parse --is-inside-work-tree &>/dev/null; then
         if [ "$is_silent" = "false" ]; then
-            echo "Error: '$path' is not a Git repository."
+            echo "Not a git repository. (Did you navigate to the /.git folder?)"
         fi
         NOT_GIT=$((NOT_GIT+1))
         return 1
@@ -226,11 +226,6 @@ function report_single_repo {
 }
 
 function summarize_counters_single {
-    if [ $TOTAL -eq 0 ]; then
-        echo "No repositories found."
-        return
-    fi
-
     if [ $NOT_FOUND -gt 0 ]; then
         echo "Repository not found."
         return
@@ -415,10 +410,7 @@ function notify {
 }
 
 function autoreport_get {
-    local freq
-    local delay
-
-sudo -s freq="$freq" delay="$delay" <<'SUDO_END'
+sudo -s <<'SUDO_END'
     source config.config
 
     read -r freq delay \
