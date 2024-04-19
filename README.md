@@ -126,7 +126,6 @@ Repositories behind remote: 1
 
 
 TODO:
-* distinguish between stdout and stderr
 * wipe/clear ask for confirmation
 * instead of refusing to install warn. Refuse performing appropriate commands
 * Autoreport - check if is installed.

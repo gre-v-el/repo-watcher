@@ -23,7 +23,7 @@ if [ "$1" = "add" ] && [ $# -eq 2 ]; then
     if [ -d "$2" ] && [[ "$2" =~ \/\.git[\/]?$ ]]; then
         add "$2"
     else
-        echo "The repo does not exist or isn't a .git directory"
+        echoerr "The repo does not exist or isn't a .git directory"
     fi
 # REMOVE
 elif [ "$1" = "rm" ] && [ $# -eq 2 ]; then
@@ -36,7 +36,7 @@ elif [ "$1" = "status" ] && [ $# -eq 2 ]; then
     if [[ "$2" =~ \/\.git[\/]?$ ]]; then
         repo_status "$2"
     else
-        echo "This is not a .git directory"
+        echoerr "This is not a .git directory"
     fi
 # CLEAN
 elif [ "$1" = "clean" ] && [ $# -eq 1 ]; then
@@ -49,14 +49,14 @@ elif [ "$1" = "find" ] && [ $# -eq 2 ]; then
     if [ -d "$2" ]; then
         find_repos "$2" "false"
     else
-        echo "This directory doesn't exist"    
+        echoerr "This directory doesn't exist"    
     fi
 # FIND (INCLUDE)
 elif [ "$1" = "find" ] && [ $# -eq 3 ] && [ "$3" = "-w" ]; then
     if [ -d "$2" ]; then
         find_repos "$2" "true"
     else
-        echo "This directory doesn't exist"    
+        echoerr "This directory doesn't exist"    
     fi
 # REPORT WATCHED
 elif [ "$1" = "report" ] && [ $# -eq 1 ]; then
@@ -96,7 +96,7 @@ elif [ "$1" = "autoreport" ] && [ $# -eq 2 ] && [ "$2" = "-d" ]; then
 # AUTOREPORT (SET)
 elif [ "$1" = "autoreport" ] && [ $# -eq 4 ] && [ "$2" = "-s" ]; then
     if ! [[ "$3" =~ ^[1-9][0-9]*$ ]] || ! [[ "$4" =~ ^[1-9][0-9]*$ ]]; then
-        echo "Frequency and delay have to be whole numbers!"
+        echoerr "Frequency and delay have to be whole numbers."
     else
         autoreport_set "$3" "$4"
     fi
@@ -105,5 +105,5 @@ elif [ "$1" = "notify" ] && [ $# -eq 1 ]; then
     notify
 # INVALID USAGE
 else
-    echo "Invalid usage. See $0 --help"
+    echoerr "Invalid usage. See $0 --help"
 fi

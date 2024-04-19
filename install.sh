@@ -11,19 +11,23 @@
 #
 # Licensed under GPL
 
+function echoerr {
+    >&2 echo "$@"
+}
+
 # check dependencies
 if ! [ -x "$(command -v git)" ]; then
-  echo 'Error: git is not installed.' >&2
+  echoerr 'Error: git is not installed.' >&2
   exit 1
 fi
 
 if ! [ -x "$(command -v zenity)" ]; then
-  echo 'Error: zenity is not installed.' >&2
+  echoerr 'Error: zenity is not installed.' >&2
   exit 1
 fi
 
 if ! [ -x "$(command -v anacron)" ]; then
-  echo 'Error: anacron is not installed.' >&2
+  echoerr 'Error: anacron is not installed.' >&2
   exit 1
 fi
 
@@ -36,7 +40,7 @@ chmod a+x lib.sh
 
 # check access to /usr/local/bin
 if [ ! -w "/usr/local/bin" ]; then
-  echo 'Error: /usr/local/bin is not writable. Run with sudo.' >&2
+  echoerr 'Error: /usr/local/bin is not writable. Run with sudo.' >&2
   exit 1
 fi
 

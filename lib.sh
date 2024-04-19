@@ -13,6 +13,10 @@
 
 source config.config
 
+function echoerr {
+    >&2 echo "$@"
+}
+
 function add {
     # append normalized path to the watch
     realpath -m "$*" >> "$WATCHFILE"
@@ -83,7 +87,7 @@ function find_repos {
 
             echo "Added $repo"
         else
-            echo "Invalid number"
+            echoerr "Invalid number"
         fi
     done
 
@@ -131,7 +135,7 @@ function repo_status {
 
 function check_internet {
     if ! wget -q --spider "$PING_DOMAIN"; then
-        echo "No internet connection"
+        echoerr "No internet connection"
         exit
     fi
 }
@@ -153,7 +157,7 @@ function report_single_repo {
     # Check if the directory exists
     if [ ! -d "$path" ]; then
         if [ "$is_silent" = "false" ]; then
-            echo "Error: Directory not found at '$path'."
+            echoerr "Error: Directory not found at '$path'."
         fi
         NOT_FOUND=$((NOT_FOUND+1))
         return 1
@@ -165,7 +169,7 @@ function report_single_repo {
     # Check if it's a git repository
     if ! git rev-parse --is-inside-work-tree &>/dev/null; then
         if [ "$is_silent" = "false" ]; then
-            echo "Not a git repository. (Did you navigate to the /.git folder?)"
+            echoerr "Not a git repository. (Did you navigate to the /.git folder?)"
         fi
         NOT_GIT=$((NOT_GIT+1))
         return 1
@@ -331,7 +335,7 @@ function resolve {
 
         if ! [ -d "$line" ]; then
             if [ "$silent" != "true" ]; then
-                echo "$line is inaccessible"
+                echoerr "$line is inaccessible"
             fi
             cd - > /dev/null || return
             continue
@@ -419,7 +423,7 @@ sudo -s <<'SUDO_END'
     | cut -d ' ' -f 1,2 )
 
     if [[ -z "$freq" ]] || [[ -z "$delay" ]]; then
-        echo "Autoreport not set."
+        echoerr "Autoreport not set."
     else
         echo "Frequency: $freq days"
         echo "Delay: $delay minutes after startup"
