@@ -27,6 +27,9 @@ if ! [ -x "$(command -v anacron)" ]; then
   exit 1
 fi
 
+# cd into the script's directory
+cd "$(realpath "$(dirname "$0")")" || exit 1
+
 # make scripts executable
 chmod a+x repowatch.sh
 chmod a+x lib.sh

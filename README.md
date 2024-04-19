@@ -21,7 +21,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `wipe`
 
     Remove all repositories from the list
-- [x] `find <directory> [-w]`   
+- [x] `find <directory> [-w]`
 
     Find all repositories in a given directory. By default, it omits already watched repositories. The `-w` flag includes watched repositories.
 - [x] `report [<.git directory path>] [-s]`
@@ -33,7 +33,7 @@ usage: `repowatch [--help] <command> [<args>]`
 - [x] `autoreport [-l] [-d] [-s <frequency> <delay>]`
 
     Manage the frequency of background checks. `-l` flag outputs the current configuration. `-d` flag disables autoreport. `-s` flag sets a new configuration. `Frequency` is a period in days, `delay` is the delay in minutes after the system startup after which the check should be run. If no flags have been given, an actual check will be performed. Each check will send a desktop notification. Requires sudo to read and write to anacron config.
-- [x] `notify` 
+- [x] `notify`
 
     Report watched repositories as a notification. This is what autoreport looks like.
 - [ ] `gui`
@@ -125,12 +125,9 @@ Repositories behind remote: 1
 
 
 
-
-
 TODO:
-
-stderr
-wipe/clear ask for confirmation
-check zenity and anacron
-instead of refusing to install warn. Refuse performing appropriate commadns
-"Autoreport requires you to run the install.sh script. Otherwise they will be properly scheduled but not run."
+* distinguish between stdout and stderr
+* wipe/clear ask for confirmation
+* instead of refusing to install warn. Refuse performing appropriate commands
+* Autoreport - check if is installed.
+* add src directory
