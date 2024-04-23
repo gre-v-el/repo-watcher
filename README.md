@@ -126,5 +126,4 @@ Repositories behind remote: 1
 
 
 TODO:
-* install - check if already installed.
 * gui

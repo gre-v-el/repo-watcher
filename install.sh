@@ -17,16 +17,22 @@ function echoerr {
 
 # check dependencies
 if ! [ -x "$(command -v git)" ]; then
-  echoerr 'Error: git is not installed.' >&2
+  echoerr 'Error: git is not installed.'
   exit 1
 fi
 
 if ! [ -x "$(command -v zenity)" ]; then
-  echo 'Warning: zenity is not installed. Notifications and gui will not work.' >&2
+  echo 'Warning: zenity is not installed. Notifications and gui will not work.'
 fi
 
 if ! [ -x "$(command -v anacron)" ]; then
-  echo 'Warning: anacron is not installed. You will not be able to set autoreport.' >&2
+  echo 'Warning: anacron is not installed. You will not be able to set autoreport.'
+fi
+
+# check if already installed
+if [ -f "/usr/local/bin/repowatch" ]; then
+  echoerr 'Error: repowatch is already installed.'
+  exit 1
 fi
 
 # cd into the script's directory
