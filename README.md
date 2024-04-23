@@ -126,9 +126,6 @@ Repositories behind remote: 1
 
 
 TODO:
-* wipe/clear ask for confirmation
 * instead of refusing to install warn. Refuse performing appropriate commands
-* Autoreport - check if is installed.
-* add src directory
+* install - check if already installed.
 * gui
-* comments

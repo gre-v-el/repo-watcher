@@ -112,6 +112,14 @@ function clean_repos {
 }
 
 function wipe_repos {
+    local answer
+    echo -n "Do you want to remove all repositories from the watchlist? (y/N) >"
+    read -r answer
+
+    if [ "$answer" != "y" ] && [ "$answer" != "Y" ]; then
+        exit 0
+    fi
+
     echo "Removed $(wc -l "$WATCHFILE" | cut -d ' ' -f 1) repos from the watchlist."
     echo -n "" > "$WATCHFILE"
 }
@@ -329,6 +337,7 @@ function resolve {
 
     while read -r line; do
         iter=$((iter+1))
+        # counter
         if [ "$silent" = "true" ]; then
             echo -ne "[$iter/$total]\r"
         fi

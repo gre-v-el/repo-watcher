@@ -66,7 +66,7 @@ elif [ "$1" = "report" ] && [ $# -eq 1 ]; then
     check_internet
     report_watched "false"
     summarize_counters_multiple
-# REPORT WATCHED (SILENT)
+# REPORT WATCHED (SUMMARIZE)
 elif [ "$1" = "report" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
     check_internet
     report_watched "true"
@@ -75,7 +75,7 @@ elif [ "$1" = "report" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
 elif [ "$1" = "report" ] && [ $# -eq 2 ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "false"
-# REPORT GIVEN (SILENT)
+# REPORT GIVEN (SUMMARIZE)
 elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
     check_internet
     report_single_repo "$(realpath "$2")" "true"
@@ -84,7 +84,7 @@ elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
 elif [ "$1" = "resolve" ] && [ $# -eq 1 ]; then
     check_internet
     resolve "false"
-# RESOLVE (SILENT)
+# RESOLVE (SUMMARIZE)
 elif [ "$1" = "resolve" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
     check_internet
     resolve "true"
