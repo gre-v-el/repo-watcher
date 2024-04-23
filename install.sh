@@ -22,13 +22,11 @@ if ! [ -x "$(command -v git)" ]; then
 fi
 
 if ! [ -x "$(command -v zenity)" ]; then
-  echoerr 'Error: zenity is not installed.' >&2
-  exit 1
+  echo 'Warning: zenity is not installed. Notifications and gui will not work.' >&2
 fi
 
 if ! [ -x "$(command -v anacron)" ]; then
-  echoerr 'Error: anacron is not installed.' >&2
-  exit 1
+  echo 'Warning: anacron is not installed. You will not be able to set autoreport.' >&2
 fi
 
 # cd into the script's directory

@@ -36,6 +36,7 @@ elif [ "$1" = "list" ] && [ $# -eq 1 ]; then
     cat "$WATCHFILE"
 # STATUS
 elif [ "$1" = "status" ] && [ $# -eq 2 ]; then
+    check_command "git"
     if [[ "$2" =~ \/\.git[\/]?$ ]]; then
         repo_status "$2"
     else
@@ -63,41 +64,54 @@ elif [ "$1" = "find" ] && [ $# -eq 3 ] && [ "$3" = "-w" ]; then
     fi
 # REPORT WATCHED
 elif [ "$1" = "report" ] && [ $# -eq 1 ]; then
+    check_command "git"
     check_internet
     report_watched "false"
     summarize_counters_multiple
 # REPORT WATCHED (SUMMARIZE)
 elif [ "$1" = "report" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
+    check_command "git"
     check_internet
     report_watched "true"
     summarize_counters_multiple
 # REPORT GIVEN
 elif [ "$1" = "report" ] && [ $# -eq 2 ]; then
+    check_command "git"
     check_internet
     report_single_repo "$(realpath "$2")" "false"
 # REPORT GIVEN (SUMMARIZE)
 elif [ "$1" = "report" ] && [ $# -eq 3 ] && [ "$3" = "-s" ]; then
+    check_command "git"
     check_internet
     report_single_repo "$(realpath "$2")" "true"
     summarize_counters_single
 # RESOLVE
 elif [ "$1" = "resolve" ] && [ $# -eq 1 ]; then
+    check_command "git"
     check_internet
     resolve "false"
 # RESOLVE (SUMMARIZE)
 elif [ "$1" = "resolve" ] && [ $# -eq 2 ] && [ "$2" = "-s" ]; then
+    check_command "git"
     check_internet
     resolve "true"
 # AUTOREPORT
 elif [ "$1" = "autoreport" ] && [ $# -eq 1 ]; then
+    check_command "zenity"
+    check_command "git"
     autoreport_perform
 elif [ "$1" = "autoreport" ] && [ $# -eq 2 ] && [ "$2" = "-l" ]; then
+    check_command "anacron"
     autoreport_get
 # AUTOREPORT (disable)
 elif [ "$1" = "autoreport" ] && [ $# -eq 2 ] && [ "$2" = "-d" ]; then
+    check_command "anacron"
     autoreport_disable
 # AUTOREPORT (SET)
 elif [ "$1" = "autoreport" ] && [ $# -eq 4 ] && [ "$2" = "-s" ]; then
+    check_command "git"
+    check_command "anacron"
+    check_command "zenity"
     if ! [[ "$3" =~ ^[1-9][0-9]*$ ]] || ! [[ "$4" =~ ^[1-9][0-9]*$ ]]; then
         echoerr "Frequency and delay have to be whole numbers."
     else
@@ -105,6 +119,7 @@ elif [ "$1" = "autoreport" ] && [ $# -eq 4 ] && [ "$2" = "-s" ]; then
     fi
 # NOTIFY
 elif [ "$1" = "notify" ] && [ $# -eq 1 ]; then
+    check_command "zenity"
     notify
 # INVALID USAGE
 else

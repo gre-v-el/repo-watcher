@@ -17,6 +17,13 @@ function echoerr {
     >&2 echo "$@"
 }
 
+function check_command {
+    if ! [ -x "$(command -v "$1")" ]; then
+        echoerr "Error: $1 is not installed."
+        exit 1
+    fi
+}
+
 function add {
     # append normalized path to the watch
     realpath -m "$*" >> "$WATCHFILE"

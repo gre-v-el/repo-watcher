@@ -126,6 +126,5 @@ Repositories behind remote: 1
 
 
 TODO:
-* instead of refusing to install warn. Refuse performing appropriate commands
 * install - check if already installed.
 * gui
