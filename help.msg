@@ -1,4 +1,4 @@
-usage: repowatch [--help] <command> [<args>]
+usage: repowatch [--help|--version] <command> [<args>]
 
 A tool to manage local git repositories
 

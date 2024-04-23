@@ -1,6 +1,6 @@
 # repowatch - A tool to manage local git repositories
 
-usage: `repowatch [--help] <command> [<args>]`
+usage: `repowatch [--help|--version] <command> [<args>]`
 
 ### Commands:
 - [x] `add <.git directory path>` 
@@ -130,3 +130,5 @@ TODO:
 * instead of refusing to install warn. Refuse performing appropriate commands
 * Autoreport - check if is installed.
 * add src directory
+* gui
+* comments

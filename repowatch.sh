@@ -3,7 +3,7 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 18 2024
+# Last Modified On : Apr 23 2024
 # Version          : 0.1
 #
 # Description      :
@@ -15,6 +15,9 @@ source lib.sh
 
 if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     cat help.msg
+    exit
+elif [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
+    cat version.msg
     exit
 fi
 
