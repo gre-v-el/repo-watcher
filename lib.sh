@@ -439,7 +439,7 @@ sudo -s <<'SUDO_END'
     | cut -d ' ' -f 1,2 )
 
     if [[ -z "$freq" ]] || [[ -z "$delay" ]]; then
-        echoerr "Autoreport not set."
+        echo "Autoreport not set."
     else
         echo "Frequency: $freq days"
         echo "Delay: $delay minutes after startup"
@@ -481,4 +481,98 @@ function autoreport_perform {
     fi
 
     notify
+}
+
+function show_gui {
+    while true; do
+        # clean and wipe are omitted (available as buttons in list)
+        local choice
+        choice="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Choose an action" --column=Action Add Remove List Status Report Resolve Autoreport)"
+
+        if [ $? -ne 0 ]; then # closed or cancelled
+            exit
+        fi
+
+        case "$choice" in
+            "Add")
+                local path
+                path="$(zenity --file-selection --directory --title="Select a git repository ")"
+                
+                if [ $? -ne 0 ]; then # closed or cancelled
+                    continue
+                fi
+                
+                path="$path/.git"
+                if [ -d "$path" ] && [[ "$path" =~ \/\.git[\/]?$ ]]; then
+                    add "$path"
+                else
+                    zenity --error --text="The repo does not exist or isn't a .git directory"
+                fi
+                ;;
+            "Remove")
+                local path
+                while true; do
+                    path="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Select a repository to remove" --column=Repository --separator="\n" < "$WATCHFILE")"
+                    if [ $? -ne 0 ] || [ "$path" = "" ]; then # closed or cancelled
+                        break
+                    fi
+                    remove "$path"
+                done
+                ;;
+            "List")
+                zenity --width=550 --height=400 --text-info --title="Repowatch" --filename="$WATCHFILE"
+                ;;
+            "Status")
+                local path
+                path="$(zenity --file-selection --directory --title="Select a git repository")"
+
+                if [ $? -ne 0 ]; then # closed or cancelled
+                    continue
+                fi
+
+                path="$path/.git"
+                if [ -d "$path" ] && [[ "$path" =~ \/\.git[\/]?$ ]]; then
+                    zenity --info --title="Repowatch" --text="$(repo_status "$path")"
+                else
+                    zenity --error --text="The repo does not exist or isn't a .git directory"
+                fi
+                ;;
+            "Report")
+                ( report_watched "false" 2>&1 ; summarize_counters_multiple ) | zenity --width=550 --height=400 --text-info --title="Repowatch"
+                ;;
+            "Resolve")
+                resolve "false" | zenity --width=550 --height=400 --text-info --title="Repowatch"
+                ;;
+            "Autoreport")
+                local choice2
+                choice2="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Current settings:\n$(autoreport_get)" --column=Action Enable Disable Perform)"
+
+                if [ $? -ne 0 ]; then # closed or cancelled
+                    continue
+                fi
+
+                case "$choice2" in
+                    "Enable")
+                        local freq
+                        local delay
+                        
+                        freq="$(zenity --entry --title="Repowatch" --text="Enter the frequency in days")"
+                        delay="$(zenity --entry --title="Repowatch" --text="Enter the delay in minutes after startup")"
+                        
+                        if ! [[ "$freq" =~ ^[1-9][0-9]*$ ]] || ! [[ "$delay" =~ ^[1-9][0-9]*$ ]]; then
+                            echoerr "Frequency and delay have to be whole numbers."
+                        else
+                            autoreport_set "$freq" "$delay"
+                        fi
+                        ;;
+                    "Disable")
+                        autoreport_disable
+                        ;;
+                    "Perform")
+                        autoreport_perform
+                        ;;
+                esac
+                ;;
+        esac
+    done
 }

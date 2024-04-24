@@ -121,6 +121,12 @@ elif [ "$1" = "autoreport" ] && [ $# -eq 4 ] && [ "$2" = "-s" ]; then
 elif [ "$1" = "notify" ] && [ $# -eq 1 ]; then
     check_command "zenity"
     notify
+# GUI
+elif [ "$1" = "gui" ] && [ $# -eq 1 ]; then
+    check_command "git"
+    check_command "anacron"
+    check_command "zenity"
+    show_gui
 # INVALID USAGE
 else
     echoerr "Invalid usage. See $0 --help"
