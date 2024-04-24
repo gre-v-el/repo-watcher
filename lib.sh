@@ -503,7 +503,7 @@ function show_gui {
         # clean and wipe are omitted (available as buttons in list)
         # TODO: wipe, clean, find
         local choice
-        choice="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Choose an action" --column=Action Add Remove List Status Report Resolve Autoreport)"
+        choice="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Choose an action" --column=Action Add Remove List Status Find Report Resolve Autoreport)"
 
         if [ $? -ne 0 ]; then # closed or cancelled
             exit
@@ -552,6 +552,43 @@ function show_gui {
                 else
                     zenity --error --text="The repo does not exist or isn't a .git directory"
                 fi
+                ;;
+            "Find")
+                local path
+                path="$(zenity --file-selection --directory --title="Select a directory to search in")"
+
+                if [ $? -ne 0 ] || [ "$path" = "" ]; then # closed or cancelled
+                    continue
+                fi
+
+                if [ ! -d "$path" ]; then
+                    zenity --error --text="This directory doesn't exist"
+                    continue
+                fi
+        
+                local tmp
+                tmp=$(mktemp)
+                echo -ne "Finding...\r"
+
+                find "$path" -type "d" -name ".git" 2>/dev/null | \
+                while read -r dir; do
+                    if ! grep -qxF "$dir" "$WATCHFILE"; then
+                        echo "$dir"
+                    fi
+                done >"$tmp"
+                
+                echo -ne "          \r"
+                while true; do
+                    local repo
+                    repo=$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Select repositories to add" --column=Repository --separator="\n" < "$tmp")
+                    if [ $? -ne 0 ] || [ "$repo" = "" ]; then # closed or cancelled
+                        break
+                    fi
+
+                    add "$repo"
+                    sed -i "\#$repo#d" "$tmp"
+                done
+                rm "$tmp"
                 ;;
             "Report")
                 ( report_watched "false" 2>&1 ; summarize_counters_multiple ) | zenity --width=550 --height=400 --text-info --title="Repowatch"
