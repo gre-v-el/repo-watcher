@@ -12,6 +12,7 @@
 # Licensed under GPL
 
 source lib.sh
+source gui.sh
 
 if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     cat help.msg
