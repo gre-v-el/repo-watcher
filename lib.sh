@@ -76,11 +76,26 @@ function find_repos {
     echo "Found $lines repositories in $1"
     echo ""
 
-    echo "Enter the index of the repository to add (or press ENTER to end):"
+    if [ "$lines" -eq 0 ]; then
+        rm "$tempfile"
+        return
+    fi
+
+    echo "Enter the index of the repository to add (leave blank to exit, enter \"ALL\" to add all):"
     while true; do 
         echo -n "    > "
         
         read -r number
+
+        if [ "$number" = "ALL" ]; then
+            while read -r line; do
+                # delete the number, colon and space
+                line=$(echo "$line" | cut -d ':' -f 2 | cut -c 2-)
+                add "$line"
+            done < "$tempfile"
+            echo "Added all repositories"
+            break
+        fi
 
         if ! [[ "$number" =~ ^[0-9]+$ ]]; then
             break
@@ -486,6 +501,7 @@ function autoreport_perform {
 function show_gui {
     while true; do
         # clean and wipe are omitted (available as buttons in list)
+        # TODO: wipe, clean, find
         local choice
         choice="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Choose an action" --column=Action Add Remove List Status Report Resolve Autoreport)"
 
