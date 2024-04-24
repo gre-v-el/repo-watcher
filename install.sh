@@ -3,8 +3,8 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 15 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 18 2024
-# Version          : 0.1
+# Last Modified On : Apr 22 2024
+# Version          : 1.0
 #
 # Description      :
 # Installation script for repowatch.

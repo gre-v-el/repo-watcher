@@ -3,8 +3,8 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 23 2024
-# Version          : 0.1
+# Last Modified On : Apr 24 2024
+# Version          : 1.0
 #
 # Description      :
 # CLI entry point for repowatch.

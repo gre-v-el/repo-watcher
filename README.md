@@ -36,7 +36,7 @@ usage: `repowatch [--help|--version] <command> [<args>]`
 - [x] `notify`
 
     Report watched repositories as a notification. This is what autoreport looks like.
-- [ ] `gui`
+- [x] `gui`
 
     Launch a Zenity-based graphical user interface.
 
@@ -126,4 +126,4 @@ Repositories behind remote: 1
 
 
 TODO:
-* gui
+* gui help message

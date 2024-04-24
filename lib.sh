@@ -3,11 +3,11 @@
 # Author           : Gabriel Myszkier
 # Created On       : Apr 8 2024
 # Last Modified By : Gabriel Myszkier
-# Last Modified On : Apr 18 2024
-# Version          : 0.1
+# Last Modified On : Apr 24 2024
+# Version          : 1.0
 #
 # Description      :
-# Library function for repowatch.
+# Library functions for repowatch.
 #
 # Licensed under GPL
 
@@ -500,8 +500,7 @@ function autoreport_perform {
 
 function show_gui {
     while true; do
-        # clean and wipe are omitted (available as buttons in list)
-        # TODO: wipe, clean, find
+        # clean and wipe are available as buttons in list
         local choice
         choice="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Choose an action" --column=Action Add Remove List Status Find Report Resolve Autoreport)"
 
@@ -528,7 +527,7 @@ function show_gui {
             "Remove")
                 local path
                 while true; do
-                    path="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Select a repository to remove" --column=Repository --separator="\n" < "$WATCHFILE")"
+                    path="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Select a repository to remove" --column=Repository --separator="\n" < "$WATCHFILE" 2>/dev/null)"
                     if [ $? -ne 0 ] || [ "$path" = "" ]; then # closed or cancelled
                         break
                     fi
@@ -536,7 +535,19 @@ function show_gui {
                 done
                 ;;
             "List")
-                zenity --width=550 --height=400 --text-info --title="Repowatch" --filename="$WATCHFILE"
+                local choice2
+                choice2=$(zenity --width=550 --height=400 --text-info --title="Repowatch" --filename="$WATCHFILE" --extra-button="Wipe" --cancel-label="Back" --ok-label="Clean")
+                local exit_code=$?
+                if [ $exit_code -eq 1 ] && [ "$choice2" = "Wipe" ]; then
+                    if zenity --question --title="Repowatch" --text="Do you want to remove all repositories from the watchlist?"; then
+                        echo -n "" > "$WATCHFILE"
+                    fi
+                elif [ $exit_code -eq 0 ] && [ "$choice2" = "" ]; then
+                    if zenity --question --title="Repowatch" --text="Do you want to remove all non-existing repositories from the watchlist?"; then
+                        zenity --info --title="Repowatch" --text="$(clean_repos)"
+                    fi
+                fi
+                
                 ;;
             "Status")
                 local path
@@ -580,8 +591,17 @@ function show_gui {
                 echo -ne "          \r"
                 while true; do
                     local repo
-                    repo=$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Select repositories to add" --column=Repository --separator="\n" < "$tmp")
-                    if [ $? -ne 0 ] || [ "$repo" = "" ]; then # closed or cancelled
+                    repo=$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Select repositories to add" --column=Repository --separator="\n" --extra-button="Add all" < "$tmp" 2>/dev/null)
+                    local exit_code=$?
+
+                    if [ $exit_code -eq 1 ] && [ "$repo" = "Add all" ]; then
+                        while read -r repo; do
+                            add "$repo"
+                        done < "$tmp"
+                        break
+                    fi
+                    
+                    if [ $exit_code -ne 0 ] || [ "$repo" = "" ]; then # closed or cancelled
                         break
                     fi
 
@@ -598,33 +618,37 @@ function show_gui {
                 ;;
             "Autoreport")
                 local choice2
-                choice2="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Current settings:\n$(autoreport_get)" --column=Action Enable Disable Perform)"
 
-                if [ $? -ne 0 ]; then # closed or cancelled
-                    continue
-                fi
+                while true; do
+                    choice2="$(zenity --width=550 --height=400 --list --title="Repowatch" --text="Current settings:\n$(autoreport_get)" --column=Action Enable Disable Perform)" 2>/dev/null
 
-                case "$choice2" in
-                    "Enable")
-                        local freq
-                        local delay
-                        
-                        freq="$(zenity --entry --title="Repowatch" --text="Enter the frequency in days")"
-                        delay="$(zenity --entry --title="Repowatch" --text="Enter the delay in minutes after startup")"
-                        
-                        if ! [[ "$freq" =~ ^[1-9][0-9]*$ ]] || ! [[ "$delay" =~ ^[1-9][0-9]*$ ]]; then
-                            echoerr "Frequency and delay have to be whole numbers."
-                        else
-                            autoreport_set "$freq" "$delay"
-                        fi
-                        ;;
-                    "Disable")
-                        autoreport_disable
-                        ;;
-                    "Perform")
-                        autoreport_perform
-                        ;;
-                esac
+                    if [ $? -ne 0 ]; then # closed or cancelled
+                        break
+                    fi
+
+                    case "$choice2" in
+                        "Enable")
+                            local freq
+                            local delay
+                            
+                            freq="$(zenity --entry --title="Repowatch" --text="Enter the frequency in days")"
+                            delay="$(zenity --entry --title="Repowatch" --text="Enter the delay in minutes after startup")"
+                            
+                            if ! [[ "$freq" =~ ^[1-9][0-9]*$ ]] || ! [[ "$delay" =~ ^[1-9][0-9]*$ ]]; then
+                                zenity --error --title="Repowatch" --text="Frequency and delay have to be whole numbers."
+                            else
+                                autoreport_set "$freq" "$delay"
+                            fi
+                            ;;
+                        "Disable")
+                            autoreport_disable
+                            ;;
+                        "Perform")
+                            autoreport_perform &
+                            zenity --info --title="Repowatch" --text="Scanning in the background. A notification will appear when done."
+                            ;;
+                    esac
+                done
                 ;;
         esac
     done
