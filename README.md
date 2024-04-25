@@ -122,8 +122,3 @@ Repositories with uncommited changes: 1
 Repositories ahead of remote: 1
 Repositories behind remote: 1
 ```
-
-
-
-TODO:
-* gui help message
