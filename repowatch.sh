@@ -18,7 +18,12 @@ if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     cat help.msg
     exit
 elif [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
-    cat version.msg
+    echo "repowatch 1.0"
+    echo "written by Gabriel Myszkier"
+    echo "Licensed under GPL"
+    echo ""
+    echo "see $(realpath "$(dirname "$0")")/README.md"
+    echo "see https://github.com/gre-v-el/repo-watcher"
     exit
 fi
 

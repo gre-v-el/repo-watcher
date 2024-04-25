@@ -1,42 +1,58 @@
 # repowatch - A tool to manage local git repositories
 
+You can search for repositories, watch them, see reports, and configure automatic push/pull resolution. The tool is designed to be used in the terminal, but it also has a graphical interface. It also supports periodic desktop notifications.
+
+# Installation
+
+Repowatch depends on **Zenity** to show the gui and notifications, and **anacron** to perform automatic checks. You can still use the tool without these dependencies, but you won't be able to use the GUI or automatic checks. The installation script will install the program to `/usr/local/bin/repowatch`.
+
+1. Clone the repository and don't move it (after the installation the script will depend on this folder).
+2. Run the `install.sh` script.
+
+```bash
+$ git clone https://github.com/gre-v-el/repo-watcher.git
+$ cd repo-watcher
+$ sudo ./install.sh
+```
+
+# Usage
 usage: `repowatch [--help|--version] <command> [<args>]`
 
 ### Commands:
-- [x] `add <.git directory path>` 
+* `add <.git directory path>` 
   
     Add a repository to the watchlist
-- [x] `rm <.git directory path>`
+* `rm <.git directory path>`
 
     Remove a repository from the watchlist
-- [x] `list`
+* `list`
 
     Display all watched repositories
-- [x] `status <.git directory path>`
+* `status <.git directory path>`
 
     Show the status of a given repository (watched, available)
-- [x] `clean`
+* `clean`
 
     Remove all unavailable repositories (deleted, without permissions, unmounted)
-- [x] `wipe`
+* `wipe`
 
     Remove all repositories from the list
-- [x] `find <directory> [-w]`
+* `find <directory> [-w]`
 
     Find all repositories in a given directory. By default, it omits already watched repositories. The `-w` flag includes watched repositories.
-- [x] `report [<.git directory path>] [-s]`
+* `report [<.git directory path>] [-s]`
 
     If given a path, it reports the state of this repository. Otherwise, it reports the state of all watched repositories. The -s flag tells the program to summarize the report without details.
-- [x] `resolve [-s]`
+* `resolve [-s]`
 
     Resolve all trivial cases (only push or only pull). The -s flag tells the program to summarize the report without details.
-- [x] `autoreport [-l] [-d] [-s <frequency> <delay>]`
+* `autoreport [-l] [-d] [-s <frequency> <delay>]`
 
     Manage the frequency of background checks. `-l` flag outputs the current configuration. `-d` flag disables autoreport. `-s` flag sets a new configuration. `Frequency` is a period in days, `delay` is the delay in minutes after the system startup after which the check should be run. If no flags have been given, an actual check will be performed. Each check will send a desktop notification. Requires sudo to read and write to anacron config.
-- [x] `notify`
+* `notify`
 
     Report watched repositories as a notification. This is what autoreport looks like.
-- [x] `gui`
+* `gui`
 
     Launch a Zenity-based graphical user interface.
 
@@ -62,9 +78,7 @@ usage: `repowatch [--help|--version] <command> [<args>]`
 
 The **.git directory path** is a path to the .git directory inside your repository, for example `/home/usr/repo/.git`. The paths can be both global and local.
 
-This tool requires **Zenity** and **anacron** to be installed.
-
-### Examples
+# Examples
 
 ```
 $ repowatch status /home/usr/repo/.git
