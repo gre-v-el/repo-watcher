@@ -60,3 +60,6 @@ CAT_END
 
 # make the script executable
 chmod a+x /usr/local/bin/repowatch
+
+echo 'Repowatch installed successfully.'
+echo "notice: do not move this ($(realpath ".")) directory. If you need it elsewhere, you can run uninstall.sh, move this directory and install again."
