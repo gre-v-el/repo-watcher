@@ -1,0 +1,101 @@
+.TH repowatch 1 "May 2024" "1.0" "repowatch manual"
+.SH NAME
+repowatch \- A tool to manage local git repositories
+
+.SH SYNOPSIS
+.B repowatch
+[\fI--help\fP|\fI--version\fP] \fI<command>\fP [\fI<args>\fP]
+
+.SH DESCRIPTION
+.B repowatch
+is a command-line tool designed to help manage local git repositories. It allows users to search for repositories, watch them, generate reports, and configure automatic push/pull resolutions. The tool provides both terminal and graphical interfaces, with support for periodic desktop notifications.
+
+.SH COMMANDS
+.TP
+.B add \fI<.git directory path>\fP
+Add a repository to the watchlist.
+
+.TP
+.B rm \fI<.git directory path>\fP
+Remove a repository from the watchlist.
+
+.TP
+.B list
+Display all watched repositories.
+
+.TP
+.B status \fI<.git directory path>\fP
+Show the status of a given repository (watched, available).
+
+.TP
+.B clean
+Remove all unavailable repositories (deleted, without permissions, unmounted).
+
+.TP
+.B wipe
+Remove all repositories from the list.
+
+.TP
+.B find \fI<directory>\fP [\fI-w\fP]
+Find all repositories in a given directory. By default, it omits already watched repositories. The \fI-w\fP flag includes watched repositories.
+
+.TP
+.B report [\fI<.git directory path>\fP] [\fI-s\fP]
+Report the state of a given repository if a path is provided, otherwise report the state of all watched repositories. The \fI-s\fP flag summarizes the report without details.
+
+.TP
+.B resolve [\fI-s\fP]
+Resolve all trivial cases (only push or only pull). The \fI-s\fP flag summarizes the resolution report without details.
+
+.TP
+.B autoreport [\fI-l\fP] [\fI-d\fP] [\fI-s <frequency> <delay>\fP]
+Manage the frequency of background checks. The \fI-l\fP flag outputs the current configuration, the \fI-d\fP flag disables autoreport, and the \fI-s\fP flag sets a new configuration with \fIfrequency\fP in days and \fIdelay\fP in minutes after system startup. Requires sudo to read and write to anacron config.
+
+.TP
+.B notify
+Report watched repositories as a notification. This is what autoreport looks like.
+
+.TP
+.B gui
+Launch a Zenity-based graphical user interface.
+
+.SH CONFIGURATION
+The following options can be set in the \fIconfig.config\fP file:
+
+.TP
+.B WATCHFILE
+A file to store watched repositories.
+
+.TP
+.B AUTOSCAN_RESOLVE
+Whether or not the autoscan should resolve trivial cases.
+
+.TP
+.B NOTIFY_OFFLINE
+Whether or not the autoscan should send a notification when you're offline.
+
+.TP
+.B PING_DOMAIN
+A domain the program will ping to check if you're online.
+
+.SH EXAMPLES
+See the repository README for detailed examples.
+
+.SH DEPENDENCIES
+Repowatch depends on \fIZenity\fP for the GUI and notifications, and \fIanacron\fP to perform automatic checks. These dependencies are optional but required for full functionality.
+
+.SH AUTHOR
+Developed by Gabriel Myszkier.
+
+.SH REPORTING BUGS
+https://github.com/gre-v-el/repo-watcher/issues
+
+.SH SEE ALSO
+.BR git (1),
+.BR zenity (1),
+.BR anacron (8),
+
+https://github.com/gre-v-el/repo-watcher
+
+.SH COPYRIGHT
+2024, Gabriel Myszkier
